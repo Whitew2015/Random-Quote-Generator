@@ -1,23 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState, useEffect } from 'react';
+
+
 
 function App() {
+  
+  const [quote, setQuote] = useState("");
+  const [author, setAuthor] = useState("");
+  
+  const quoteAPI = async () => {
+    try {
+      const res =  await fetch(`https://api.api-ninjas.com/v1/quotes`);
+      const data = await res.json();
+      console.log(data);
+      let randomNum = Math.floor(Math.random() * data.length);
+      setQuote(data[randomNum]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    quoteAPI();
+  }, []);
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <p>{quote.text}</p>
     </div>
   );
 }
